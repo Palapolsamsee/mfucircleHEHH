@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1 class="text-2xl font-bold mb-4 text-center">Popular Tweets</h1>
+
+<div class="space-y-6">
+    {% for tweet in tweets %}
+    <div class="post-card bg-white p-6 rounded-lg shadow-lg">
+        <div class="post-header flex items-center gap-4 mb-4">
+            <strong>@{{ tweet.author.username }}</strong>
+        </div>
+        <div class="post-content mb-4">
+            <p>{{ tweet.content }}</p>
+        </div>
+        <div class="post-actions flex justify-between pt-4 border-t border-gray-200">
+            <span>Likes: {{ tweet.likes.count }} | Comments: {{ tweet.comment_count }}</span>
+            <span>Popularity Score: {{ tweet.popularity_score }}</span>
+        </div>
+    </div>
+    {% empty %}
+    <p>No popular tweets found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
