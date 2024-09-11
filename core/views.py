@@ -10,6 +10,8 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+
+from core.serializers import TweetSerializer
 from .models import Tweet, Comment
 from django.contrib.auth.models import User
 from .forms import SearchForm, TweetForm, UserRegisterForm
@@ -64,7 +66,6 @@ def like_tweet(request, tweet_id):
     })
 
 
-
 @login_required
 def create_tweet(request):
     if request.method == 'POST':
@@ -73,11 +74,12 @@ def create_tweet(request):
             tweet = form.save(commit=False)
             tweet.author = request.user
             tweet.save()
-            return redirect('create_tweet') # Redirect to the home page after posting
+            # Redirect to the page you want after creating the tweet
+            return redirect('create_tweet')  # หรือคุณสามารถเปลี่ยนเป็นหน้าอื่น เช่น 'home' หรือ 'all_tweet'
     else:
         form = TweetForm()
-        tweets = Tweet.objects.all()
-    return render(request, 'core/all_tweets.html', {'tweets': tweets, 'form': form})
+        tweets = Tweet.objects.all()  # ดึงทวีตทั้งหมดเพื่อแสดงในหน้า
+    return render(request, 'core/all_tweets.html', {'form': form, 'tweets': tweets})
 
 @login_required
 def create_comment(request, tweet_id):
@@ -135,7 +137,11 @@ def all_tweet(request):
 def tweet_detail(request, tweet_id):
     tweet = get_object_or_404(Tweet, id=tweet_id)
     comments = Comment.objects.filter(tweet=tweet)
-    return render(request, 'core/tweet_detail.html', {'tweet': tweet, 'comments': comments})
+    
+    is_anonymous = tweet.anonymous  # ตรวจสอบว่าเป็น anonymous 
+
+    return render(request, 'core/tweet_detail.html', {'tweet': tweet, 'comments': comments, 'is_anonymous': is_anonymous})
+
 
 @login_required
 def search_tweets(request):

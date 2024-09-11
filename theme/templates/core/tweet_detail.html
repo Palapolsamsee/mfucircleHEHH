@@ -1,5 +1,5 @@
-<!-- core/templates/core/tweet_detail.html -->
-{% extends 'core/base.html' %} {% block content %}
+{% extends 'core/base.html' %} 
+{% block content %}
 <div class="flex justify-center items-center min-h-screen">
   <div class="w-full max-w-2xl">
     <h1 class="text-2xl font-bold mb-4 text-center text-gray-200">Tweet Detail</h1>
@@ -54,7 +54,13 @@
     <ul class="space-y-4">
       {% for comment in comments %}
       <li class="bg-white p-4 rounded-lg shadow-md">
-        <strong>{{ comment.author }}</strong>: {{ comment.content }}
+        <strong>
+            {% if tweet.anonymous %}
+                Anonymous
+            {% else %}
+                {{ comment.author.username }}
+            {% endif %}
+        </strong>: {{ comment.content }}
         <span class="block text-sm text-gray-500"
           >{{ comment.created_at }}</span
         >
