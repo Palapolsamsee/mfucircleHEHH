@@ -1,0 +1,55 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+{% if tweets %}
+    <div class="text-center text-xl font-semibold mb-4">Search Results</div>
+    
+    <div class="posts-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        {% for tweet in tweets %}
+        <div class="post-card" style="width: 100%; max-width: 600px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 15px;">
+            <div class="post-header" style="display: flex; align-items: center; gap: 10px;">
+                <div class="post-author-info">
+                    <strong>
+                        {% if not tweet.anonymous %}
+                            {{ tweet.author.username }}
+                        {% else %}
+                            Anonymous
+                        {% endif %}
+                    </strong>
+                    <div class="post-handle" style="color: #888;">@{{ tweet.handle }}</div>
+                </div>
+            </div>
+            <div class="post-content" style="margin-top: 10px; padding-left: 50px;">
+                <p>{{ tweet.content }}</p>
+            </div>
+            <div class="post-actions" style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee;">
+                <div>
+                    <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
+                    <span>Comments: </span><span id="comments-{{ tweet.id }}" data-number="{{ tweet.comment_count }}">{{ tweet.comment_count }}</span>
+                </div>
+                <div>
+                    <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <span id="like-icon-{{ tweet.id }}" class="like-icon" style="cursor: pointer;" onclick="likeTweet({{ tweet.id }})">
+                            {% if user in tweet.likes.all %}
+                            <i class="fa fa-heart" style="color:red;"></i>
+                            {% else %}
+                            <i class="fa fa-heart" style="color:black;"></i>
+                            {% endif %}
+                        </span>
+                    </form>
+                    <a href="{% url 'tweet_detail' tweet.id %}" style="text-decoration: none; color: inherit; margin-left: 15px;">
+                        💬
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="post-card" style="width: 100%; max-width: 600px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 15px;">
+            <p>No tweets found.</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endif %}
+{% endblock %}

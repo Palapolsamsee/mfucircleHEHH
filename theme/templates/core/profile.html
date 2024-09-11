@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+  <h1>{{ user.username }}'s Profile</h1>
+  <div class="posts-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+    <div class="post-card" style="width: 100%; max-width: 600px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 15px;">
+      <strong>{{user.username}} </strong>
+      <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Post</button>
+      </form>
+    
+    </div>
+  <ul>
+    {% for tweet in tweets %}
+      <li>
+    <div class="post-card" style="width: 100%; max-width: 600px; background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 15px;">
+
+        {% if tweet.anonymous %}
+          <strong>Anonymous</strong>: {{ tweet.content }}<br>
+        {% else %}
+          <strong>{{ tweet.author.username }}</strong>: {{ tweet.content }}<br>
+        {% endif %}
+        Likes: {{ tweet.likes }} | Comments: {{ tweet.comment_count }}
+
+        <!-- Form for adding a comment -->
+        <form method="post" action="{% url 'add_comment' tweet.id %}">
+          {% csrf_token %}
+          <textarea name="comment_content" rows="2" cols="50" placeholder="Add a comment" required></textarea><br>
+          <button type="submit">Comment</button>
+        </form>
+
+        <!-- Display comments -->
+        <ul>
+          {% for comment in tweet.comments.all %}
+            <li>{{ comment.author }}: {{ comment.content }}</li>
+          {% empty %}
+            <li>No comments yet.</li>
+          {% endfor %}
+        </ul>
+      </div>
+      </li>
+    {% empty %}
+      <li>No tweets yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

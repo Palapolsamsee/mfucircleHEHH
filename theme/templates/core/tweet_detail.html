@@ -1,0 +1,91 @@
+<!-- core/templates/core/tweet_detail.html -->
+{% extends 'core/base.html' %} {% block content %}
+<div class="flex justify-center items-center min-h-screen">
+  <div class="w-full max-w-2xl">
+    <h1 class="text-2xl font-bold mb-4 text-center text-gray-200">Tweet Detail</h1>
+
+    <div class="post-card bg-white p-6 rounded-lg shadow-lg mb-6">
+      <div class="post-header flex items-center gap-4 mb-4">
+        <div class="post-author-info">
+            <strong>
+                {% if not tweet.anonymous %}
+                    {{ tweet.author.username }}
+                {% else %}
+                    Anonymous
+                {% endif %}
+            </strong>
+            <strong>
+                {{ tweet.handle }}
+                {% if not tweet.anonymous and tweet.is_author_admin %}
+                <svg
+                    class="w-6 h-6 text-yellow-400 dark:text-white inline-block ml-2"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        fill-rule="evenodd"
+                        d="M12 2c-.791 0-1.55.314-2.11.874l-.893.893a.985.985 0 0 1-.696.288H7.04A2.984 2.984 0 0 0 4.055 7.04v1.262a.986.986 0 0 1-.288.696l-.893.893a2.984 2.984 0 0 0 0 4.22l.893.893a.985.985 0 0 1 .288.696v1.262a2.984 2.984 0 0 0 2.984 2.984h1.262c.261 0 .512.104.696.288l.893.893a2.984 2.984 0 0 0 4.22 0l.893-.893a.985.985 0 0 1 .696-.288h1.262a2.984 2.984 0 0 0 2.984-2.984V15.7c0-.261.104-.512.288-.696l.893-.893a2.984 2.984 0 0 0 0-4.22l-.893-.893a.985.985 0 0 1-.288-.696V7.04a2.984 2.984 0 0 0-2.984-2.984h-1.262a.985.985 0 0 1-.696-.288l-.893-.893A2.984 2.984 0 0 0 12 2Zm3.683 7.73a1 1 0 1 0-1.414-1.413l-4.253 4.253-1.277-1.277a1 1 0 0 0-1.415 1.414l1.985 1.984a1 1 0 0 0 1.414 0l4.96-4.96Z"
+                        clip-rule="evenodd"
+                    />
+                </svg>
+                {% endif %}
+            </strong>
+        </div>
+        
+      </div>
+      <div class="post-content mb-4">
+        <p>{{ tweet.content }}</p>
+      </div>
+      <div
+        class="post-actions flex justify-between pt-4 border-t border-gray-200"
+      >
+        <div>
+          <span>Likes: </span><span>{{ tweet.likes.count }}</span> |
+          <span>Comments: </span><span>{{ tweet.comment_count }}</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="text-xl font-semibold mb-4 text-center text-gray-200">Comments:</h3>
+    <ul class="space-y-4">
+      {% for comment in comments %}
+      <li class="bg-white p-4 rounded-lg shadow-md">
+        <strong>{{ comment.author }}</strong>: {{ comment.content }}
+        <span class="block text-sm text-gray-500"
+          >{{ comment.created_at }}</span
+        >
+      </li>
+      {% empty %}
+      <li>No comments yet.</li>
+      {% endfor %}
+    </ul>
+
+    <!-- Comment form -->
+    <form method="POST" action="{% url 'add_comment' tweet.id %}" class="mt-6">
+      {% csrf_token %}
+      <textarea
+        name="content"
+        rows="3"
+        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+        placeholder="Add a comment"
+      ></textarea>
+      <button
+        type="submit"
+        class="mt-3 bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300"
+      >
+        Comment
+      </button>
+    </form>
+
+    <a
+      href="{% url 'create_tweet' %}"
+      class="mt-6 inline-block text-gray-200 hover:underline text-center w-full "
+       >Back to all tweets</a
+    >
+  </div>
+</div>
+{% endblock %}

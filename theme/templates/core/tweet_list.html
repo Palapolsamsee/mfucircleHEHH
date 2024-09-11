@@ -1,0 +1,14 @@
+<!-- tweet_list.html -->
+<ul>
+    {% for tweet in tweets %}
+    <li>
+        <strong>
+            {% if tweet.anonymous %}
+                Anonymous
+            {% else %}
+                {{ tweet.author.username }}
+            {% endif %}
+        </strong>: {{ tweet.content }}
+    </li>
+    {% endfor %}
+</ul>

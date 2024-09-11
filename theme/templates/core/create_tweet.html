@@ -1,0 +1,13 @@
+<!-- create_tweet.html -->
+
+
+<!-- POST  -->
+{{user.username}}
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Tweet</button>
+</form>
+<!-- POST  -->
+
+
