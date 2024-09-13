@@ -3,10 +3,12 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import math
 from django.utils.crypto import get_random_string
+from ckeditor.fields import RichTextField
+
 class Tweet(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     handle = models.CharField(max_length=100)
-    content = models.TextField()
+    content = RichTextField(blank = True,null = True)
     likes = models.ManyToManyField(User, related_name='tweet_likes', blank=True)
     comment_count = models.IntegerField(default=0)
     anonymous = models.BooleanField(default=False) # !! anonymouse M P!!

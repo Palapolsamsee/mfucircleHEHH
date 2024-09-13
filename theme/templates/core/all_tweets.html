@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="post-content" style="margin-top: 10px; padding-left: 50px;">
-            <p>{{ tweet.content }}</p>
+            <p>{{ tweet.content|safe }}</p>
         </div>
         <div class="post-actions" style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee;">
             <div>
@@ -47,14 +47,24 @@
     <div class="popup-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 100%; max-width: 600px; position: relative;">
         <span class="close" onclick="togglePopup()" style="position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer;">&times;</span>
         <strong>{{ user.username }} ชื่ออยู่นี่</strong>
-        <form method="post">
+
+        <form method="POST" action="{% url 'create_tweet' %}">
+            {% csrf_token %}
+            {{ form.media }}
+            {{ form.as_p }}  <!-- Ensure form is rendered correctly -->
+            <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300">
+              Submit
+            </button>
+          </form>
+
+        {% comment %} <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
 
             <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out transform hover:scale-105" type="submit">
                 Post
             </button>
-        </form>
+        </form> {% endcomment %}
     </div>
 </div>
 

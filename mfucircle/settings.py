@@ -42,15 +42,24 @@ INSTALLED_APPS = [
     'rest_framework',
     'tailwind',
     'theme',
+    'ckeditor',
+    'ckeditor_uploader',
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+
+
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+
 TAILWIND_APP_NAME = 'theme'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
+
 
 
 MIDDLEWARE = [

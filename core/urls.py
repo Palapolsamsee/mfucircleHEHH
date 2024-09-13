@@ -35,5 +35,5 @@ urlpatterns = [
     path('search/', search_tweets, name='search'),
     # path('search/', home, name='search'),  # เพิ่มเส้นทางนี้
     path('popular/', views.popular_tweets, name='popular_tweets'),
-    
+    path('ckeditor/', include('ckeditor_uploader.urls')),
 ]

@@ -38,7 +38,7 @@
         
       </div>
       <div class="post-content mb-4">
-        <p>{{ tweet.content }}</p>
+        <p>{{ tweet.content|safe }}</p>
       </div>
       <div
         class="post-actions flex justify-between pt-4 border-t border-gray-200"
@@ -61,9 +61,7 @@
                 {{ comment.author.username }}
             {% endif %}
         </strong>: {{ comment.content }}
-        <span class="block text-sm text-gray-500"
-          >{{ comment.created_at }}</span
-        >
+        <span class="block text-sm text-gray-500">{{ comment.created_at }}</span>
       </li>
       {% empty %}
       <li>No comments yet.</li>

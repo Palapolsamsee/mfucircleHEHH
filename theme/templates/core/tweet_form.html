@@ -1,0 +1,9 @@
+<!-- core/templates/core/tweet_form.html -->
+<form method="POST" action="{% url 'create_tweet' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300">
+      Submit
+    </button>
+  </form>
+  
