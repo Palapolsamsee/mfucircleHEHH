@@ -12,9 +12,9 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
 from core.serializers import TweetSerializer
-from .models import Tweet, Comment
+from .models import Tweet, Comment, Event
 from django.contrib.auth.models import User
-from .forms import SearchForm, TweetForm, UserRegisterForm
+from .forms import EventForm, SearchForm, TweetForm, UserRegisterForm
 from django.http import JsonResponse
 from rest_framework import viewsets
 from .models import Tweet
@@ -25,11 +25,18 @@ def home(request):
     return render(request, 'index.html')
 
 def hello(request):
-    return render(request, 'home.html')
+    events = Event.objects.all().order_by('-event_date')  # Ordering by most recent
+    print(events)
+    return render(request, 'home.html', {'events': events})
+
 
 def post(request, p_id):
     kpost= "hello Post" 
     return HttpResponse(kpost +":"+ str(p_id))
+
+def news(request):
+    events = Event.objects.all().order_by('-event_date')
+    return render(request, 'core/news.html', {'events': events})
 
 def popular_tweets(request):
     # ดึงโพสต์ทั้งหมดแล้วคำนวณคะแนนความนิยม
@@ -79,7 +86,8 @@ def create_tweet(request):
     else:
         form = TweetForm()
         tweets = Tweet.objects.all()  # ดึงทวีตทั้งหมดเพื่อแสดงในหน้า
-    return render(request, 'core/all_tweets.html', {'form': form, 'tweets': tweets})
+        events = Event.objects.all().order_by('-event_date')
+    return render(request, 'core/all_tweets.html', {'form': form, 'tweets': tweets, 'events': events})
 
 @login_required
 def create_comment(request, tweet_id):
@@ -129,8 +137,15 @@ def add_comment(request, tweet_id):
 
 @login_required
 def all_tweet(request):
-    tweets = Tweet.objects.all()  # ดึงทวีตทั้งหมดจากฐานข้อมูล
-    return render(request, 'core/all_tweets.html', {'tweets': tweets})
+    tweets = Tweet.objects.all()
+    events = Event.objects.all()  # Fetching all events, ordered by event date  # ดึงทวีตทั้งหมดจากฐานข้อมูล
+    
+    print("All tweet view called")
+    
+    return render(request, 'core/all_tweets.html', {
+        'tweets': tweets,
+        'events': events,
+        })
 
 
 @login_required
@@ -153,3 +168,21 @@ def search_tweets(request):
             tweets = Tweet.objects.filter(content__icontains=query)
     return render(request, 'core/search_results.html', {'form': form, 'tweets': tweets})
 
+
+# Restricting event creation to admins in views.py (if needed for a form-based approach)
+from django.contrib.admin.views.decorators import staff_member_required
+
+
+
+@staff_member_required  # Ensures only staff/admins can access this view
+def create_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST, request.FILES)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+            event.save()
+            return redirect('home')  # Redirect to home page or event list
+    else:
+        form = EventForm()
+    return render(request, 'core/create_event.html', {'form': form})

@@ -1,41 +1,42 @@
-{% extends 'core/base.html' %}
+{% comment %} {% extends 'core/base.html' %}
 
 {% block title %}MFUCIRCLE - Home{% endblock %}
 
 {% block extra_styles %}
     <style>
-        .tweet-form {
+        .container {
+            display: flex;
+        }
+        .events-column {
+            flex: 1;
+            margin-right: 2rem;
+        }
+        .tweets-column {
+            flex: 2;
+        }
+        .event {
             background-color: #fff9f0;
             border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
-        .tweet-input {
+        .event img {
             width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #f0d0a8;
+            height: auto;
             border-radius: 8px;
+        }
+        .event h3 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+        .event-date {
+            font-size: 0.9rem;
+            color: gray;
             margin-bottom: 1rem;
-            font-size: 1rem;
-            resize: vertical;
-            background-color: #fffaf2;
         }
-        .tweet-button {
-            background-color: #f0a868;
-            color: #4a4a4a;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 24px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: background-color 0.3s ease;
-        }
-        .tweet-button:hover {
-            background-color: #e89848;
-        }
-        .tweet {
+        .tweet-form, .tweet {
             background-color: #fff9f0;
             border-radius: 16px;
             padding: 1.5rem;
@@ -46,16 +47,29 @@
 {% endblock %}
 
 {% block content %}
-    <div class="tweet-form">
-        <textarea class="tweet-input" placeholder="What's making you feel good today?" rows="3"></textarea>
-        <button class="tweet-button">Share Positivity</button>
-    </div>
-    <div id="tweet-container">
-        <!-- Tweets will be rendered here dynamically -->
+    <div class="container">
+        <!-- Events Column (Left) -->
+        <div class="events-column">
+            {% for event in events %}
+                <div class="event">
+                    <img src="{{ event.event_image.url }}" alt="{{ event.title }}">
+                    <h3>{{ event.title }}</h3>
+                    <p class="event-date">On {{ event.event_date }}</p>
+                    <p>{{ event.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Tweets Column (Right) -->
+        <div class="tweets-column">
+            <div class="tweet-form">
+                <textarea class="tweet-input" placeholder="What's making you feel good today?" rows="3"></textarea>
+                <button class="tweet-button">Share Positivity</button>
+            </div>
+            <div id="tweet-container">
+                <!-- Tweets will be rendered here dynamically -->
+            </div>
+        </div>
     </div>
 {% endblock %}
-
-{% block extra_scripts %}
-
-
-{% endblock %}
+ {% endcomment %}

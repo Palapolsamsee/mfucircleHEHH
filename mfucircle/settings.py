@@ -56,7 +56,7 @@ INTERNAL_IPS = [
 
 TAILWIND_APP_NAME = 'theme'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
@@ -77,7 +77,9 @@ ROOT_URLCONF = 'mfucircle.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'theme/templates'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

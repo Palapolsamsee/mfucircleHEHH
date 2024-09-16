@@ -1,6 +1,6 @@
 # <<<<<<< HEAD
 
-from .views import home
+from .views import create_event, home
 from django.urls import path, include
 from .import views
 from .views import like_tweet, profile
@@ -13,10 +13,12 @@ router.register(r'tweets', TweetViewSet)
 router.register(r'comments', CommentViewSet)
 from .views_api import TweetViewSet, CommentViewSet
 from .views import search_tweets
+from django.conf import settings
+from django.conf.urls.static import static
 #commit
 urlpatterns = [
     # path('', include(router.urls)),
-    path('', home, name='home'), 
+    path('', home, name='home'),
     # path('', auth_views.LoginView.as_view(), name='login'),
     path('register/', views.register, name='register'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -32,8 +34,13 @@ urlpatterns = [
     path('like_tweet/<int:tweet_id>/', views.like_tweet, name='like_tweet'),
     path('like/<int:tweet_id>/', like_tweet, name='like_tweet'),
     path('home/', views.create_tweet, name='create_tweet'),
+    path('home/', views.hello, name='home'),
     path('search/', search_tweets, name='search'),
     # path('search/', home, name='search'),  # เพิ่มเส้นทางนี้
+    path('news/', views.news, name='news'),
     path('popular/', views.popular_tweets, name='popular_tweets'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
-]
+    path('create-event/', views.create_event, name='create_event'),
+    path('create-event/', views.all_tweet, name='all_tweets'), # Link to the event creation form
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
