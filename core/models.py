@@ -53,3 +53,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'{self.author} commented: {self.content}'
+    
+    
+
+class Event(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    event_date = models.DateField()
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE)

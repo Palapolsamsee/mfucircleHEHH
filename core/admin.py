@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Tweet, Comment
-
+from .models import Tweet, Comment, Event
 
 @admin.register(Tweet)
 class TweetAdmin(admin.ModelAdmin):
@@ -20,3 +19,14 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ('author__username', 'content', 'tweet__content')
     list_filter = ('created_at',)
     ordering = ('-created_at',)
+
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ['title', 'event_date', 'created_by']
+    readonly_fields = ['created_by']
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # Only set created_by during the first save
+            obj.created_by = request.user
+        super().save_model(request, obj, form, change)
