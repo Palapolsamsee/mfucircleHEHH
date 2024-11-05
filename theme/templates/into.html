@@ -1,0 +1,185 @@
+<html lang="en">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   Bsky Clone
+  </title>
+  <script src="https://cdn.tailwindcss.com">
+  </script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Web Page{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+   body {
+            font-family: 'Roboto', sans-serif;
+        }
+  </style>
+ </head>
+ <body class="bg-gray-100">
+  <div class="min-h-screen flex flex-col md:flex-row">
+   <!-- Sidebar -->
+   <div class="w-full md:w-64 bg-white shadow-md">
+    <div class="p-6">
+     <h1 class="text-2xl font-bold text-blue-600">
+      Bsky
+     </h1>
+    </div>
+    <nav class="mt-10">
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-home w-6">
+      </i>
+      <span class="ml-3">
+       Home
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-hashtag w-6">
+      </i>
+      <span class="ml-3">
+       Explore
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-bell w-6">
+      </i>
+      <span class="ml-3">
+       Notifications
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-envelope w-6">
+      </i>
+      <span class="ml-3">
+       Messages
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-bookmark w-6">
+      </i>
+      <span class="ml-3">
+       Bookmarks
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-user w-6">
+      </i>
+      <span class="ml-3">
+       Profile
+      </span>
+     </a>
+     <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+      <i class="fas fa-cog w-6">
+      </i>
+      <span class="ml-3">
+       Settings
+      </span>
+     </a>
+    </nav>
+   </div>
+   <!-- Main Content -->
+   <div class="flex-1 p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+     <h2 class="text-3xl font-bold">
+      Home
+     </h2>
+     <button class="bg-blue-600 text-white px-4 py-2 rounded-full">
+      Tweet
+     </button>
+    </div>
+    <!-- Tweet Input -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+     <div class="flex">
+      <textarea class="ml-4 w-full border-none focus:ring-0" placeholder="What's happening?" rows="3">
+      </textarea>
+     </div>
+     <div class="flex justify-between items-center mt-4">
+      <div class="flex space-x-4 text-blue-600">
+       <i class="fas fa-image">
+       </i>
+       <i class="fas fa-chart-bar">
+       </i>
+       <i class="fas fa-smile">
+       </i>
+       <i class="fas fa-calendar-alt">
+       </i>
+      </div>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded-full">
+       Tweet
+      </button>
+     </div>
+    </div>
+    <!-- Tweets -->
+    {% for tweet in tweets %}
+    <div class="space-y-6">
+     <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="flex">
+       <div class="ml-4">
+        <div class="flex items-center">
+         <h3 class="font-bold">
+            {% if not tweet.anonymous %}{{ tweet.author.username }}{% else %}Anonymous{% endif %}
+         </h3>
+         <span class="text-gray-500 ml-2">
+          · 2h
+         </span>
+        </div>
+        <div class="post-content" style="margin-top: 10px; padding-left: 50px;">
+            <p>{{ tweet.content|safe }}</p>
+        </div>
+        <div class="flex space-x-4 text-gray-500 mt-2">
+         <i class="far fa-comment">
+            <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
+         </i>
+         <i class="far fa-heart">
+            <span>Comments: </span> <span id="comments-{{ tweet.id }}" data-number="{{ tweet.get_comment_count }}">{{ tweet.get_comment_count }}</span>
+         </i>
+         <div>
+            <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" style="display:inline;">
+                {% csrf_token %}
+                <span id="like-icon-{{ tweet.id }}" class="like-icon" style="cursor: pointer;" onclick="likeTweet({{ tweet.id }})">
+                    {% if user in tweet.likes.all %}
+                    <i class="fa fa-heart" style="color:red;"></i> 
+                    {% else %}
+                    <i class="fa fa-heart" style="color:black;"></i>
+                    {% endif %}
+                </span>
+            </form>
+            <a href="{% url 'tweet_detail' tweet.id %}" style="text-decoration: none; color: inherit; margin-left: 15px;">
+                <i class="fa fa-comment"></i> Comment
+            </a>
+        </div>
+        </div>
+       </div>
+      </div>
+     </div>
+   </div>
+   {% empty %}
+   <div>No tweets yet.</div>
+   {% endfor %}
+  </div>
+ </body>
+
+ <script>
+    function togglePopup() {
+        var popup = document.getElementById("post-popup");
+        if (popup.style.display === "none" || popup.style.display === "") {
+            popup.style.display = "flex";
+        } else {
+            popup.style.display = "none";
+        }
+    }
+
+    // Close the popup when clicking outside of it
+    window.onclick = function(event) {
+        var popup = document.getElementById("post-popup");
+        if (event.target == popup) {
+            popup.style.display = "none";
+        }
+    }
+</script>
+</html>

@@ -5,9 +5,6 @@
 
     <!-- Section to Display Events -->
     <div class="events-section" style="width: 40%; max-width: 600px; border-radius: 8px; padding: 15px;">
-{% comment %}         <h2 style="font-size: 1.5rem; background-color: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-            Events
-        </h2> {% endcomment %}
         {% if events %}
             {% for event in events %}
             <div class="event-card" style="background-color: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
@@ -40,7 +37,7 @@
             <div class="post-actions" style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee;">
                 <div>
                     <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
-                    <span>Comments: </span><span id="comments-{{ tweet.id }}" data-number="{{ tweet.comment_count }}">{{ tweet.comment_count }}</span>
+                    <span>Comments: </span> <span id="comments-{{ tweet.id }}" data-number="{{ tweet.get_comment_count }}">{{ tweet.get_comment_count }}</span>
                 </div>
                 <div>
                     <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" style="display:inline;">

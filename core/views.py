@@ -21,13 +21,17 @@ from .models import Tweet
 from django.contrib.auth import login
 
 
+def fistpage(request):
+    return render(request,'into.html')
+
 def home(request):
     return render(request, 'index.html')
 
-def hello(request):
-    events = Event.objects.all().order_by('-event_date')  # Ordering by most recent
-    print(events)
-    return render(request, 'home.html', {'events': events})
+# @login_
+# def hello(request):
+#     events = Event.objects.all().order_by('-event_date')  # Ordering by most recent
+#     print(events)
+#     return render(request, 'home.html', {'events': events})
 
 
 def post(request, p_id):
@@ -38,6 +42,7 @@ def news(request):
     events = Event.objects.all().order_by('-event_date')
     return render(request, 'core/news.html', {'events': events})
 
+@login_required
 def popular_tweets(request):
     # ดึงโพสต์ทั้งหมดแล้วคำนวณคะแนนความนิยม
     tweets = Tweet.objects.all()
@@ -52,9 +57,6 @@ def popular_tweets(request):
 # class CommentViewSet(viewsets.ModelViewSet):
 #     queryset = Comment.objects.all()
 #     serializer_class = CommentSerializer
-
-
-
 
 @login_required
 def like_tweet(request, tweet_id):
@@ -74,6 +76,15 @@ def like_tweet(request, tweet_id):
 
 
 @login_required
+def comment_count(request, tweet_id):
+    tweet = get_object_or_404(Tweet, id=tweet_id)
+    comment_count = tweet.comments.count()  # Use related_name to count comments
+
+    return JsonResponse({
+        'comment_count': comment_count,
+    })
+
+@login_required
 def create_tweet(request):
     if request.method == 'POST':
         form = TweetForm(request.POST)
@@ -88,6 +99,7 @@ def create_tweet(request):
         tweets = Tweet.objects.all()  # ดึงทวีตทั้งหมดเพื่อแสดงในหน้า
         events = Event.objects.all().order_by('-event_date')
     return render(request, 'core/all_tweets.html', {'form': form, 'tweets': tweets, 'events': events})
+
 
 @login_required
 def create_comment(request, tweet_id):

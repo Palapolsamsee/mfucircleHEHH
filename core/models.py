@@ -19,6 +19,9 @@ class Tweet(models.Model):
 
     def is_author_admin(self):
         return self.author.is_superuser
+
+    def get_comment_count(self):
+        return self.comments.count()
     
     def popularity_score(self):
         # !!กำหนดคะแนนเริ่มต้น โดยใช้ไลค์และคอมเมนต์
@@ -33,17 +36,6 @@ class Tweet(models.Model):
         # !!คะแนนสุดท้าย = คะแนนเริ่มต้น * ตัวคูณอายุโพสต์
         final_score = base_score * age_factor
         return final_score
-    
-    # # def encode_user_id(self):
-    # #     if self.anonymous:
-    # #         #!! เข้ารหัส user_id โดยใช้ SHA-256
-    # #         return hashlib.sha256(f'{self.author.id}{get_random_string(10)}'.encode()).hexdigest()
-    # #     return self.author.id
-    
-    # def get_encoded_id(self):
-    #     """Return base64-encoded ID for anonymous tweets"""
-    #     return base64.urlsafe_b64encode(str(self.id).encode()).decode()
-
     
 class Comment(models.Model):
     tweet = models.ForeignKey(Tweet, related_name='comments', on_delete=models.CASCADE)

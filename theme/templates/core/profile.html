@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-
 {% block content %}
   <h1>{{ user.username }}'s Profile</h1>
   <div class="posts-container" style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
@@ -10,7 +9,6 @@
           {{ form.as_p }}
           <button type="submit">Post</button>
       </form>
-    
     </div>
   <ul>
     {% for tweet in tweets %}
@@ -22,23 +20,27 @@
         {% else %}
           <strong>{{ tweet.author.username }}</strong>: {{ tweet.content }}<br>
         {% endif %}
-        Likes: {{ tweet.likes }} | Comments: {{ tweet.comment_count }}
-
-        <!-- Form for adding a comment -->
-        <form method="post" action="{% url 'add_comment' tweet.id %}">
-          {% csrf_token %}
-          <textarea name="comment_content" rows="2" cols="50" placeholder="Add a comment" required></textarea><br>
-          <button type="submit">Comment</button>
-        </form>
-
+        <div class="post-actions" style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee;">
+          <div>
+              <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
+              <span>Comments: </span> <span id="comments-{{ tweet.id }}" data-number="{{ tweet.get_comment_count }}">{{ tweet.get_comment_count }}</span>
+          </div>
+          <div>
+              <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" style="display:inline;">
+                  {% csrf_token %}
+                  <span id="like-icon-{{ tweet.id }}" class="like-icon" style="cursor: pointer;" onclick="likeTweet({{ tweet.id }})">
+                      {% if user in tweet.likes.all %}
+                      <i class="fa fa-heart" style="color:red;"></i> 
+                      {% else %}
+                      <i class="fa fa-heart" style="color:black;"></i>
+                      {% endif %}
+                  </span>
+              </form>
+              <a href="{% url 'tweet_detail' tweet.id %}" style="text-decoration: none; color: inherit; margin-left: 15px;">
+                  <i class="fa fa-comment"></i> Comment
+              </a>
+          </div>
         <!-- Display comments -->
-        <ul>
-          {% for comment in tweet.comments.all %}
-            <li>{{ comment.author }}: {{ comment.content }}</li>
-          {% empty %}
-            <li>No comments yet.</li>
-          {% endfor %}
-        </ul>
       </div>
       </li>
     {% empty %}
@@ -46,3 +48,12 @@
     {% endfor %}
   </ul>
 {% endblock %}
+
+{% comment %} 
+<ul>
+  {% for comment in tweet.comments.all %}
+    <li>{{ comment.author }}: {{ comment.content }}</li>
+  {% empty %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul> {% endcomment %}

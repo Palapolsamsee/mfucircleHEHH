@@ -44,10 +44,11 @@ INSTALLED_APPS = [
     'theme',
     'ckeditor',
     'ckeditor_uploader',
+    'widget_tweaks',
 ]
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
-
+LOGOUT_REDIRECT_URL = 'login'
 
 INTERNAL_IPS = [
     "127.0.0.1",
