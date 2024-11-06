@@ -31,7 +31,7 @@ class TweetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tweet
-        fields = ['id', 'author_name', 'handle', 'content', 'likes', 'comment_count', 'anonymous']
+        fields = ['id', 'author_name', 'content', 'likes', 'comment_count', 'anonymous']
 
     def get_author_name(self, obj):
         if obj.anonymous:

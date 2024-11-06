@@ -1,16 +1,12 @@
-# from django.http import HttpResponse
-# from django.shortcuts import render
-# from django.contrib.auth.decorators import login_required
-# from django.contrib.auth.models import User
-# from rest_framework import viewsets
-# from .models import Tweet,Comment
-# from .serializers import CommentSerializer, TweetSerializer
+from .forms import CustomUserCreationForm
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
-
+from django.shortcuts import render, redirect
+from .models import Helpcenter
+from .forms import HelpcenterForm
 from core.serializers import TweetSerializer
 from .models import Tweet, Comment, Event
 from django.contrib.auth.models import User
@@ -26,13 +22,6 @@ def fistpage(request):
 
 def home(request):
     return render(request, 'index.html')
-
-# @login_
-# def hello(request):
-#     events = Event.objects.all().order_by('-event_date')  # Ordering by most recent
-#     print(events)
-#     return render(request, 'home.html', {'events': events})
-
 
 def post(request, p_id):
     kpost= "hello Post" 
@@ -194,7 +183,36 @@ def create_event(request):
             event = form.save(commit=False)
             event.created_by = request.user
             event.save()
-            return redirect('home')  # Redirect to home page or event list
+            return redirect('create_event')  # Redirect to home page or event list
     else:
         form = EventForm()
     return render(request, 'core/create_event.html', {'form': form})
+
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # ทำการล็อกอินให้ผู้ใช้ทันทีหลังลงทะเบียน
+            return redirect('login')  # แก้ไขเส้นทางนี้ตามที่ต้องการ
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'register.html', {'form': form})
+
+
+@login_required
+def helpcenter_view(request):
+    # ดึงข้อมูล Helpcenter ทั้งหมดจากฐานข้อมูล
+    helpcenters = Helpcenter.objects.all()  # หรือใช้ฟังก์ชัน filter() ถ้าต้องการกรองข้อมูล
+
+    # สร้างฟอร์มสำหรับสร้าง Helpcenter ใหม่
+    form = HelpcenterForm(request.POST or None)
+
+    if form.is_valid():
+        form.save()
+
+    return render(request, 'helpcenter/helpcenter_list.html', {
+        'helpcenters': helpcenters,  # ส่งข้อมูล helpcenters ไปยัง template
+        'form': form,
+    }) 

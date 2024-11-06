@@ -7,7 +7,6 @@ from ckeditor.fields import RichTextField
 
 class Tweet(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    handle = models.CharField(max_length=100)
     content = RichTextField(blank = True,null = True)
     likes = models.ManyToManyField(User, related_name='tweet_likes', blank=True)
     comment_count = models.IntegerField(default=0)
@@ -15,7 +14,7 @@ class Tweet(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return f'{self.author} (@{self.handle}): {self.content} - Likes: {self.likes.count()} - Anonymous: {str(self.anonymous)}'
+        return f'{self.author} {self.content} - Likes: {self.likes.count()} - Anonymous: {str(self.anonymous)}'
 
     def is_author_admin(self):
         return self.author.is_superuser
@@ -47,10 +46,22 @@ class Comment(models.Model):
         return f'{self.author} commented: {self.content}'
     
     
-
 class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    event_image = models.ImageField(upload_to='event_images/', null=True, blank=True)
+    event_image = models.ImageField(upload_to='event_images/', null=True, blank=False)
     event_date = models.DateField()
+    event_end = models.DateField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Helpcenter(models.Model):
+    text = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='helpcenter_images/', null=True, blank=True)
+    is_checked = models.BooleanField(default=False)  # Example of boolean field
+
+    def __str__(self):
+        return self.text[:50]
+
+    def is_checked_method(self):
+        return self.is_checked

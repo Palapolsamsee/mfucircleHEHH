@@ -1,10 +1,14 @@
 from .models import Event
 from django import forms
+
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from .models import Tweet
+from .models import Tweet ,Helpcenter
 from ckeditor.widgets import CKEditorWidget
 from django.contrib.auth.forms import AuthenticationForm
+
+
+
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True)
 
@@ -32,7 +36,7 @@ class TweetForm(forms.ModelForm):
 
     class Meta:
         model = Tweet
-        fields = ['content', 'handle', 'anonymous']
+        fields = ['content', 'anonymous']
         
 class SearchForm(forms.Form):
     query = forms.CharField(label='Search', max_length=100, required=False) 
@@ -63,3 +67,42 @@ class CustomLoginForm(AuthenticationForm):
             'placeholder': 'Password'
         })
     )
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5',
+                'placeholder': 'Your username',
+                'required': 'true'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5',
+                'placeholder': 'name@company.com',
+                'required': 'true'
+            }),
+        }
+
+    # ตั้งค่า widgets สำหรับ password fields โดยตรง
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5',
+            'placeholder': '••••••••',
+            'required': 'true'
+        }),
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5',
+            'placeholder': '••••••••',
+            'required': 'true'
+        }),
+    )
+
+class HelpcenterForm(forms.ModelForm):
+    class Meta:
+        model = Helpcenter
+        fields = ['text', 'image']  # Exclude 'date' because it's auto-generated

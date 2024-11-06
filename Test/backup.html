@@ -1,81 +1,106 @@
-{% load static tailwind_tags %}
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+    <script src="https://cdn.tailwindcss.com"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Web Page{% endblock %}</title>
+    <title> Web Page  </title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <script src="{% static 'js/scripts.js' %}"></script>
 </head>
-<body class="flex">
-    <!-- Sidebar -->
-    <div class="w-full md:w-64 bg-white shadow-md">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold text-red-600">MFU</h1>
-        </div>
-        <nav class="mt-10">
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'create_tweet' %}">
-                <i class="fas fa-home w-6"></i>
-                <span class="ml-3">Home</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-hashtag w-6"></i>
-                <span class="ml-3">Explore</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-bell w-6"></i>
-                <span class="ml-3">Notifications</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-envelope w-6"></i>
-                <span class="ml-3">Messages</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-bookmark w-6"></i>
-                <span class="ml-3">Bookmarks</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'profile' %}">
-                <i class="fas fa-user w-6"></i>
-                <span class="ml-3">Profile</span>
-            </a>
-            {% if user.is_authenticated %}
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'logout' %}">
-
-                <i class="fas fa-cog w-6"></i>
-                
-                <span class="ml-3">Logout</span>
-            </a>
-
-            
-        </nav>
-
-        <!-- Search Bar -->
-
-    </div>
-
-    <!-- Main Content -->
-    
-    <div class="flex-1 p-6">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold">Home</h2>
-            <div class="mt-6 p-4">
-                <form method="get" action="{% url 'search' %}" class="flex">
-                    <input class="py-2 pl-4 pr-10 rounded-full border border-gray-300 w-full" type="text" name="query" placeholder="Search..." value="{{ request.GET.query }}">
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-full" type="submit> <i class="fas fa-search"></i>Search</button>
-
-                </form>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="border border-black p-4 w-3/4">
+    <div class="flex flex-col min-h-screen">
+        <nav class="bg-red-500 p-4">
+            <div class="flex justify-between items-center">
+                <div class="text-white"></div>
+                <div class="text-white"></div>
             </div>
-            
+        </nav>
+        <div class="flex">
+            <div class="border border-black w-1/2 p-4">
+                <div class="text-center text-2xl mb-4">ข่าวล่าสุดของ ม.</div>
+            </div>
+            <div class="border border-black w-1/2 p-4">
+                <div class="text-right mb-4">รายละเอียด</div>
+                <div class="flex justify-between mb-4">
+                    <div>วด/ป</div>
+                    <div>เวลา</div>
+                    <div>สถานที่</div>
+                </div>
+                <div class="mb-4">รายละเอียดงาน</div>
+                <div class="border-t border-black mt-4"></div>
+                <div class="border-t border-black mt-2"></div>
+                <div class="border-t border-black mt-2"></div>
+            </div>
         </div>
-
-        <!-- Content Block -->
-        {% block content %}
-        {% endblock %}
+        <div class="text-center mt-4">ช่องทางติดต่อ สำหรับกิจกรรมอื่นๆ</div>
+        <div class="flex justify-between mt-4">
+            <a href="{% url 'login' %}"> 
+                <button class="border border-black px-4 py-2">เข้าสู่เว็บไซต์ TH</button>
+            </a>a<!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Sign in</title>
+                <script src="https://cdn.tailwindcss.com"></script>
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/> 
+            </head>
+            <body class="flex items-center justify-center min-h-screen bg-gray-100">
+                <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
+                    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+                        <img class="mx-auto h-10 w-auto" src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600" alt="Company logo">
+                        <h2 class="mt-10 text-center text-2xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
+                    </div>
+            
+                    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+                        <!-- Login Form -->
+                        <form class="space-y-6" action="{% url 'login' %}" method="POST">
+                            {% csrf_token %}
+                            <!-- Username (or Email) Field -->
+                            <div>
+                                <label for="username" class="block text-sm font-medium text-gray-900">Username or Email</label>
+                                <div class="mt-2">
+                                    {{ form.username|add_class:"block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm" }}
+                                </div>
+                            </div>
+            
+                            <!-- Password Field -->
+                            <div>
+                                <div class="flex items-center justify-between">
+                                    <label for="password" class="block text-sm font-medium text-gray-900">Password</label>
+                                    <div class="text-sm">
+                                        <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    {{ form.password|add_class:"block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm" }}
+                                </div>
+                            </div>
+            
+                            <!-- Submit Button -->
+                            <div>
+                                <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                    Sign in
+                                </button>
+                            </div>
+                        </form>
+            
+                        <p class="mt-10 text-center text-sm text-gray-500">
+                            Not a member?
+                            <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Start a 14 day free trial</a>
+                        </p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            
+            <a href="{% url 'login' %}">
+                <button class="border border-black px-4 py-2">Enter Site EN</button>
+            </a>
+        </div>
+        
     </div>
 </body>
 </html>

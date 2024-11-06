@@ -3,10 +3,24 @@
 {% block title %}Create Event{% endblock %}
 
 {% block content %}
-    <h2>Create a New Event</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Event</button>
-    </form>
+    <div class="container mx-auto p-4">
+        <h2 class="text-2xl font-semibold mb-4">Create a New Event</h2>
+        
+        <!-- Event Creation Form -->
+        <form method="post" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md max-w-lg mx-auto">
+            {% csrf_token %}
+            
+            <!-- Display the form fields -->
+            <div class="space-y-4">
+                {{ form.as_p }}
+            </div>
+            
+            <!-- Submit Button -->
+            <div class="mt-6">
+                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 focus:outline-none">
+                    Create Event
+                </button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

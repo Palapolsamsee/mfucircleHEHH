@@ -1,91 +1,156 @@
-{% extends 'core/base.html' %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100 flex"> 
 
-{% block content %}
-<div class="main-container" style="display: flex; justify-content: center; gap: 20px; align-items: flex-start;">
-
-    <!-- Section to Display Events -->
-    <div class="events-section" style="width: 40%; max-width: 600px; border-radius: 8px; padding: 15px;">
-        {% if events %}
-            {% for event in events %}
-            <div class="event-card" style="background-color: #f9f9f9; border-radius: 8px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-                <h3>{{ event.title }}</h3>
-                <p><strong>Date:</strong> {{ event.event_date }}</p>
-                <p>{{ event.description }}</p>
-                {% if event.event_image %}
-                    <img src="{{ event.event_image.url }}" alt="{{ event.title }}" style="max-width: 100%; height: auto; border-radius: 8px;" />
-                {% endif %}
-            </div>
-            {% endfor %}
-        {% else %}
-            <p>No events found.</p>
-        {% endif %}
+  <!-- Sidebar -->
+  <div class="w-64 bg-white shadow-md h-screen fixed top-0 left-0 flex flex-col">
+    <div class="p-6">
+        <h1 class="text-2xl font-bold text-red-600">MFU</h1>
     </div>
+    <nav class="mt-10 flex-grow">
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'create_tweet' %}">
+            <i class="fas fa-home w-6"></i>
+            <span class="ml-3">Home</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'popular_tweets' %}">
+            <i class="fas fa-hashtag w-6"></i>
+            <span class="ml-3">Popular</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'news' %}">
+            <i class="fas fa-bell w-6"></i>
+            <span class="ml-3">News</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-envelope w-6"></i>
+            <span class="ml-3">Messages</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-bookmark w-6"></i>
+            <span class="ml-3">Bookmarks</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'profile' %}">
+            <i class="fas fa-user w-6"></i>
+            <span class="ml-3">Profile</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-cog w-6"></i>
+            <span class="ml-3">Settings</span>
+        </a>
+    </nav>
 
-    <!-- Section to Display Tweets -->
-    <div class="tweets-section" style="width: 50%; max-width: 600px; border-radius: 8px; padding: 15px;">
-        {% for tweet in tweets %}
-        <div class="post-card" style="background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); padding: 15px; margin-bottom: 15px;">
-            <div class="post-header" style="display: flex; align-items: center; gap: 10px;">
-                <div class="post-author-info">
-                    <strong>{% if not tweet.anonymous %}{{ tweet.author.username }}{% else %}Anonymous{% endif %}</strong>
-                    <div class="post-handle" style="color: #888;">@{{ tweet.handle }}</div>
-                </div>
-            </div>
-            <div class="post-content" style="margin-top: 10px; padding-left: 50px;">
-                <p>{{ tweet.content|safe }}</p>
-            </div>
-            <div class="post-actions" style="display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid #eee;">
-                <div>
-                    <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
-                    <span>Comments: </span> <span id="comments-{{ tweet.id }}" data-number="{{ tweet.get_comment_count }}">{{ tweet.get_comment_count }}</span>
-                </div>
-                <div>
-                    <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" style="display:inline;">
-                        {% csrf_token %}
-                        <span id="like-icon-{{ tweet.id }}" class="like-icon" style="cursor: pointer;" onclick="likeTweet({{ tweet.id }})">
-                            {% if user in tweet.likes.all %}
-                            <i class="fa fa-heart" style="color:red;"></i> 
-                            {% else %}
-                            <i class="fa fa-heart" style="color:black;"></i>
-                            {% endif %}
-                        </span>
-                    </form>
-                    <a href="{% url 'tweet_detail' tweet.id %}" style="text-decoration: none; color: inherit; margin-left: 15px;">
-                        <i class="fa fa-comment"></i> Comment
-                    </a>
-                </div>
-            </div>
+    {% if user.is_authenticated %}
+    <!-- Logout link -->
+    <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'logout' %}">
+        <i class="fas fa-sign-out-alt w-6"></i>
+        <span class="ml-3">Logout</span>
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 p-6 ml-64">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold">Home</h2>
+        <div class="mt-6 p-4">
+            <form method="get" action="{% url 'search' %}" class="flex">
+                <input class="py-2 pl-4 pr-10 rounded-full border border-gray-300 w-full" type="text" name="query" placeholder="Search..." value="{{ request.GET.query }}">
+                <button class="bg-red-600 text-white px-4 py-2 rounded-full" type="submit"> <i class="fas fa-search"></i> Search</button>
+            </form>
         </div>
-        {% empty %}
-        <div>No tweets yet.</div>
-        {% endfor %}
     </div>
-</div>
 
-<!-- Popup Form -->
-<div id="post-popup" class="popup" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center;">
-    <div class="popup-content" style="background-color: white; padding: 20px; border-radius: 8px; width: 100%; max-width: 600px; position: relative;">
-        <span class="close" onclick="togglePopup()" style="position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer;">&times;</span>
-        <strong>{{ user.username }} ชื่ออยู่นี่</strong>
+    <!-- Content Block -->
+    <div class="main-container flex justify-center gap-6 items-start">
+        <!-- Section to Display Tweets -->
+        <div class="tweets-section w-3/5 max-w-2xl bg-white rounded-lg p-6 shadow-md">
+            {% for tweet in tweets %}
+            <div class="post-card bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="post-header flex items-center gap-4">
+                    <div class="post-author-info">
+                        <strong>{% if not tweet.anonymous %}{{ tweet.author.username }}{% else %}Anonymous{% endif %}</strong>
+                    </div>
+                </div>
+                <div class="post-content mt-4 pl-12">
+                    <p>{{ tweet.content|safe }}</p>
+                </div>
+                <div class="post-actions flex justify-between py-4 border-t border-gray-200">
+                    <div>
+                        <span>Likes: </span><span id="likes-{{ tweet.id }}" data-number="{{ tweet.likes.count }}">{{ tweet.likes.count }}</span>
+                        <span>Comments: </span> <span id="comments-{{ tweet.id }}" data-number="{{ tweet.get_comment_count }}">{{ tweet.get_comment_count }}</span>
+                    </div>
+                    <div>
+                        <form id="like-form-{{ tweet.id }}" method="POST" action="{% url 'like_tweet' tweet.id %}" class="inline">
+                            {% csrf_token %}
+                            <span id="like-icon-{{ tweet.id }}" class="like-icon cursor-pointer" onclick="likeTweet({{ tweet.id }})">
+                                {% if user in tweet.likes.all %}
+                                <i class="fa fa-heart text-red-500"></i> 
+                                {% else %}
+                                <i class="fa fa-heart text-gray-500"></i>
+                                {% endif %}
+                            </span>
+                        </form>
+                        <a href="{% url 'tweet_detail' tweet.id %}" class="text-gray-700 ml-4">
+                            <i class="fa fa-comment"></i> Comment
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div>No tweets yet.</div>
+            {% endfor %}
+        </div>
 
-        <form method="POST" action="{% url 'create_tweet' %}">
-            {% csrf_token %}
-            {{ form.media }}
-            {{ form.as_p }}  <!-- Ensure form is rendered correctly -->
-            <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300">
-                Submit
-            </button>
-        </form>
+        <!-- Section to Display Events -->
+        <div class="events-section w-2/5 max-w-md bg-white rounded-lg p-6 shadow-md">
+            {% if events %}
+                {% for event in events %}
+                <div class="event-card bg-gray-50 rounded-lg p-6 mb-6 shadow-md">
+                    <h3 class="text-xl font-semibold mb-4">{{ event.title }}</h3>
+                    <p class="mb-4">
+                        <strong>Start:</strong> {{ event.event_date }} <strong>End:</strong> {{ event.event_date }}
+                    </p>
+                    {% if event.event_image %}
+                        <img src="{{ event.event_image.url }}" alt="{{ event.title }}" class="w-full h-auto rounded-lg mb-4" />
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No events found.</p>
+            {% endif %}
+        </div>
     </div>
-</div>
 
-<!-- Trigger Button -->
-<button class="fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-full text-2xl" onclick="togglePopup()">
-    <i class="fas fa-plus"></i>
-</button>
+    <!-- Popup Form -->
+    <div id="post-popup" class="popup fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="popup-content bg-white p-6 rounded-lg w-full max-w-lg relative">
+            <span class="close absolute top-4 right-4 text-2xl cursor-pointer" onclick="togglePopup()">&times;</span>
+            <strong>{{ user.username }} ชื่ออยู่นี่</strong>
+            <form method="POST" action="{% url 'create_tweet' %}">
+                {% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <button type="submit" class="bg-red-500 text-white py-2 px-4 rounded-full hover:bg-red-600 transition duration-300">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
 
-<!-- JavaScript for Popup -->
-<script>
+    <!-- Trigger Button -->
+    <button class="fixed bottom-4 right-4 bg-red-500 text-white p-4 rounded-full text-2xl" onclick="togglePopup()">
+        <i class="fas fa-plus"></i>
+    </button>
+  </div>
+
+  <!-- JavaScript for Popup -->
+  <script>
     function togglePopup() {
         var popup = document.getElementById("post-popup");
         if (popup.style.display === "none" || popup.style.display === "") {
@@ -102,6 +167,6 @@
             popup.style.display = "none";
         }
     }
-</script>
-
-{% endblock %}
+  </script>
+</body>
+</html>

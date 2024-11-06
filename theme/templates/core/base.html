@@ -1,4 +1,5 @@
 {% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,67 +13,68 @@
     <script src="{% static 'js/scripts.js' %}"></script>
 </head>
 <body class="flex">
-    <!-- Sidebar -->
-    <div class="w-full md:w-64 bg-white shadow-md">
-        <div class="p-6">
-            <h1 class="text-2xl font-bold text-red-600">MFU</h1>
-        </div>
-        <nav class="mt-10">
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'create_tweet' %}">
-                <i class="fas fa-home w-6"></i>
-                <span class="ml-3">Home</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'popular_tweets' %}">
-                <i class="fas fa-hashtag w-6"></i>
-                <span class="ml-3">Popular</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'news' %}">
-                <i class="fas fa-bell w-6"></i>
-                <span class="ml-3">News</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-envelope w-6"></i>
-                <span class="ml-3">Messages</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-bookmark w-6"></i>
-                <span class="ml-3">Bookmarks</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'profile' %}">
-                <i class="fas fa-user w-6"></i>
-                <span class="ml-3">Profile</span>
-            </a>
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
-                <i class="fas fa-cog w-6"></i>
-                <span class="ml-3">Settings</span>
-            </a>
 
-            {% if user.is_authenticated %}
-            <!-- Logout link -->
-            <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'logout' %}">
-                <i class="fas fa-sign-out-alt w-6"></i>
-                <span class="ml-3">Logout</span>
-            </a>
-            {% endif %}
-        </nav>
+  <!-- Main Content -->
+  <div class="flex-1 p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold">Home</h2>
+        <div class="mt-6 p-4">
+            <form method="get" action="{% url 'search' %}" class="flex">
+                <input class="py-2 pl-4 pr-10 rounded-full border border-gray-300 w-full" type="text" name="query" placeholder="Search..." value="{{ request.GET.query }}">
+                <button class="bg-red-600 text-white px-4 py-2 rounded-full" type="submit"> <i class="fas fa-search"></i> Search</button>
+            </form>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-3xl font-bold">Home</h2>
-            <div class="mt-6 p-4">
-                <form method="get" action="{% url 'search' %}" class="flex">
-                    <input class="py-2 pl-4 pr-10 rounded-full border border-gray-300 w-full" type="text" name="query" placeholder="Search..." value="{{ request.GET.query }}">
-                    <button class="bg-red-600 text-white px-4 py-2 rounded-full" type="submit"> <i class="fas fa-search"></i> Search</button>
-                </form>
-            </div>
-        </div>
+    <!-- Content Block -->
+    {% block content %}
+    {% endblock %}
+  </div>
 
-        <!-- Content Block -->
-        {% block content %}
-        {% endblock %}
+  <!-- Sidebar ขวา -->
+  <div class="w-full md:w-64 bg-white shadow-md h-screen fixed top-0 left-0 flex flex-col">
+    <div class="p-6">
+        <h1 class="text-2xl font-bold text-red-600">MFU</h1>
     </div>
+    <nav class="mt-10 flex-grow">
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'create_tweet' %}">
+            <i class="fas fa-home w-6"></i>
+            <span class="ml-3">Home</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'popular_tweets' %}">
+            <i class="fas fa-hashtag w-6"></i>
+            <span class="ml-3">Popular</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'news' %}">
+            <i class="fas fa-bell w-6"></i>
+            <span class="ml-3">News</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-envelope w-6"></i>
+            <span class="ml-3">Help center</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-bookmark w-6"></i>
+            <span class="ml-3">Bookmarks</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'profile' %}">
+            <i class="fas fa-user w-6"></i>
+            <span class="ml-3">Profile</span>
+        </a>
+        <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="#">
+            <i class="fas fa-cog w-6"></i>
+            <span class="ml-3">Settings</span>
+        </a>
+    </nav>
+
+    {% if user.is_authenticated %}
+    <!-- Logout link -->
+    <a class="flex items-center p-2 text-gray-700 hover:bg-gray-200" href="{% url 'logout' %}">
+        <i class="fas fa-sign-out-alt w-6"></i>
+        <span class="ml-3">Logout</span>
+    </a>
+    {% endif %}
+  </div>
 </body>
 </html>

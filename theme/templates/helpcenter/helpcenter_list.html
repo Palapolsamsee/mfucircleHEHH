@@ -1,0 +1,33 @@
+<h1 class="text-3xl font-bold mb-6">Help Center</h1>
+
+<!-- แสดงรายการ Help Centers -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for helpcenter in helpcenters %}
+        <div class="bg-white p-4 rounded-lg shadow-md">
+            <!-- ข้อความช่วยเหลือ -->
+            <p class="text-lg font-semibold">{{ helpcenter.text }}</p>
+            <p class="text-sm text-gray-500">{{ helpcenter.date }}</p>
+            
+            <!-- รูปภาพ (ถ้ามี) -->
+            {% if helpcenter.image %}
+                <img src="{{ helpcenter.image.url }}" alt="Image" class="w-full h-48 object-cover rounded-md mt-4">
+            {% endif %}
+
+            <!-- CheckBox -->
+            <div class="flex items-center mt-4">
+                <input type="checkbox" {% if helpcenter.is_checked %} checked {% endif %} disabled class="mr-2">
+                <span>Checked</span>
+            </div>
+        </div>
+    {% empty %}
+        <p class="text-center col-span-3">No help centers found.</p>
+    {% endfor %}
+</div>
+
+<!-- ฟอร์มการส่งข้อมูล -->
+<h2 class="text-2xl font-semibold mt-8 mb-4">Submit New Help Center</h2>
+<form method="POST" enctype="multipart/form-data" class="bg-white p-6 rounded-lg shadow-md">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- แสดงฟอร์มในรูปแบบ <p> -->
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded-md mt-4">Submit</button>
+</form>

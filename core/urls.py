@@ -33,6 +33,7 @@ urlpatterns = [
     path('like_tweet/<int:tweet_id>/', views.like_tweet, name='like_tweet'),
     path('like/<int:tweet_id>/', like_tweet, name='like_tweet'),
     path('home/', views.create_tweet, name='create_tweet'),
+    path('helpcenter/', views.helpcenter_view, name='helpcenter_list'),  # ใช้ชื่อฟังก์ชันที่ถูกต้อง
     # path('home/', views.hello, name='home'),
     path('search/', search_tweets, name='search'),
     # path('search/', home, name='search'),  # เพิ่มเส้นทางนี้
@@ -42,6 +43,5 @@ urlpatterns = [
     path('create-event/', views.create_event, name='create_event'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('create-event/', views.all_tweet, name='all_tweets'), # Link to the event creation form
-] 
-# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,10 +1,11 @@
 from django.contrib import admin
 from .models import Tweet, Comment, Event
-
+from django.http import HttpResponseRedirect
+from .models import Helpcenter
 @admin.register(Tweet)
 class TweetAdmin(admin.ModelAdmin):
-    list_display = ('author', 'handle', 'content', 'likes_display', 'comment_count')
-    search_fields = ('author__username', 'handle', 'content')
+    list_display = ('author', 'content', 'likes_display', 'comment_count')
+    search_fields = ('author__username', 'content')
     list_filter = ('likes',)
     ordering = ('-id',)
 
@@ -30,3 +31,10 @@ class EventAdmin(admin.ModelAdmin):
         if not obj.pk:  # Only set created_by during the first save
             obj.created_by = request.user
         super().save_model(request, obj, form, change)
+
+
+
+
+class HelpcenterAdmin(admin.ModelAdmin):
+    list_display = ['text', 'date', 'is_checked']  # Include 'is_checked' in list_display
+admin.site.register(Helpcenter, HelpcenterAdmin)
