@@ -1,0 +1,5 @@
+<!-- core/templates/core/news_detail.html -->
+<h1>{{ news.title }}</h1>
+<p>{{ news.content }}</p>
+<p><small>Published on: {{ news.date_published }}</small></p>
+<a href="{% url 'news' %}">Back to News List</a>  <!-- ลิงก์กลับไปที่หน้า News -->

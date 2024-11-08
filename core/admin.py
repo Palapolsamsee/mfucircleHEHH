@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import Tweet, Comment, Event
+from .models import Tweet  # Removed the unnecessary comma
+from .models import Comment
 from django.http import HttpResponseRedirect
 from .models import Helpcenter
+
 @admin.register(Tweet)
 class TweetAdmin(admin.ModelAdmin):
     list_display = ('author', 'content', 'likes_display', 'comment_count')
@@ -22,19 +24,16 @@ class CommentAdmin(admin.ModelAdmin):
     ordering = ('-created_at',)
 
 
-@admin.register(Event)
-class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'event_date', 'created_by']
-    readonly_fields = ['created_by']
-
-    def save_model(self, request, obj, form, change):
-        if not obj.pk:  # Only set created_by during the first save
-            obj.created_by = request.user
-        super().save_model(request, obj, form, change)
-
-
-
-
 class HelpcenterAdmin(admin.ModelAdmin):
     list_display = ['text', 'date', 'is_checked']  # Include 'is_checked' in list_display
 admin.site.register(Helpcenter, HelpcenterAdmin)
+
+# @admin.register(Event)
+# class EventAdmin(admin.ModelAdmin):
+#     list_display = ['title', 'event_date', 'created_by']
+#     readonly_fields = ['created_by']
+
+#     def save_model(self, request, obj, form, change):
+#         if not obj.pk:  # Only set created_by during the first save
+#             obj.created_by = request.user
+#         super().save_model(request, obj, form, change)

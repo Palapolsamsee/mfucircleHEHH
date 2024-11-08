@@ -106,10 +106,10 @@
             <div>No tweets yet.</div>
             {% endfor %}
         </div>
-
+{% comment %} 
         <!-- Section to Display Events -->
         <div class="events-section w-2/5 max-w-md bg-white rounded-lg p-6 shadow-md">
-            {% if events %}
+            {% events if events %}
                 {% for event in events %}
                 <div class="event-card bg-gray-50 rounded-lg p-6 mb-6 shadow-md">
                     <h3 class="text-xl font-semibold mb-4">{{ event.title }}</h3>
@@ -124,7 +124,7 @@
             {% else %}
                 <p>No events found.</p>
             {% endif %}
-        </div>
+        </div> {% endcomment %}
     </div>
 
     <!-- Popup Form -->

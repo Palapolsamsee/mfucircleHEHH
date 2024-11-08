@@ -8,12 +8,12 @@ from django.shortcuts import render, redirect
 from .models import Helpcenter
 from .forms import HelpcenterForm
 from core.serializers import TweetSerializer
-from .models import Tweet, Comment, Event
+from .models import Tweet, Comment
 from django.contrib.auth.models import User
-from .forms import EventForm, SearchForm, TweetForm, UserRegisterForm
+from .forms import SearchForm, TweetForm, UserRegisterForm
 from django.http import JsonResponse
 from rest_framework import viewsets
-from .models import Tweet
+from .models import Tweet , News
 from django.contrib.auth import login
 
 
@@ -27,9 +27,9 @@ def post(request, p_id):
     kpost= "hello Post" 
     return HttpResponse(kpost +":"+ str(p_id))
 
-def news(request):
+def event(request):
     events = Event.objects.all().order_by('-event_date')
-    return render(request, 'core/news.html', {'events': events})
+    return render(request, 'core/event.html', {'events': events})
 
 @login_required
 def popular_tweets(request):
@@ -202,6 +202,23 @@ def register(request):
 
 
 @login_required
+def all_event(request):
+    events = Event.objects.all()  
+    
+    print("All Event view called")
+    
+    return render(request, 'core/all_event.html', {
+        'events': events,
+        })
+
+@login_required
+def event_detail(request, news_id):
+    events = get_object_or_404(News, id=news_id)
+    return render(request, 'core/event_detail.html', {'events': events})
+
+
+
+@login_required
 def helpcenter_view(request):
     # ดึงข้อมูล Helpcenter ทั้งหมดจากฐานข้อมูล
     helpcenters = Helpcenter.objects.all()  # หรือใช้ฟังก์ชัน filter() ถ้าต้องการกรองข้อมูล
@@ -216,3 +233,13 @@ def helpcenter_view(request):
         'helpcenters': helpcenters,  # ส่งข้อมูล helpcenters ไปยัง template
         'form': form,
     }) 
+
+@login_required
+def news_view(request):
+    newss = News.objects.all()
+    return render(request, 'core/news.html', {'newss': newss})
+
+@login_required
+def news_detail(request, news_id):
+    news = get_object_or_404(News, id=news_id)
+    return render(request, 'core/news_detail.html', {'news': news})

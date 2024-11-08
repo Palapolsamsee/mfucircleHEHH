@@ -1,0 +1,8 @@
+<!-- core/templates/core/event_detail.html -->
+<h1>{{ events.title }}</h1>
+<p>{{ events.description }}</p>
+<p><small>Date: {{ events.event_date }}</small></p>  <!-- วันที่อีเวนต์ -->
+{% if events.event_image %}
+    <img src="{{ events.event_image.url }}" alt="{{ events.title }}" width="300px" height="auto">
+{% endif %}
+<a href="{% url 'all_event' %}">Back to All Events</a>  <!-- ลิงก์กลับไปยังหน้ารายการอีเวนต์ -->

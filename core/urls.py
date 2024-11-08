@@ -37,11 +37,14 @@ urlpatterns = [
     # path('home/', views.hello, name='home'),
     path('search/', search_tweets, name='search'),
     # path('search/', home, name='search'),  # เพิ่มเส้นทางนี้
-    path('news/', views.news, name='news'),
     path('popular/', views.popular_tweets, name='popular_tweets'),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('create-event/', views.create_event, name='create_event'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('news/', views.news_view, name='news'),
+    path('news/<int:news_id>/', views.news_detail, name='news_detail'),  # เพิ่ม URL นี้
     path('create-event/', views.all_tweet, name='all_tweets'), # Link to the event creation form
+    path('events/', views.all_event, name='all_event'),
+    path('events/<int:news_id>/', views.event_detail, name='event_detail'),  # URL สำหรับรายละเอียดอีเวนต์
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -1,0 +1,18 @@
+<!-- core/templates/core/all_event.html -->
+<h1>All Events</h1>
+<ul>
+    {% for event in events %}
+        <li>
+            <a href="{% url 'event_detail' event.id %}">
+                <h2>{{ event.title }}</h2>
+            </a>
+            <p>{{ event.description|truncatewords:20 }}</p>  <!-- แสดงคำอธิบายย่อ 20 คำ -->
+            <p><small>Date: {{ event.event_date }}</small></p>  <!-- วันที่อีเวนต์ -->
+            {% if event.event_image %}
+                <img src="{{ event.event_image.url }}" alt="{{ event.title }}" width="150px" height="auto">
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>No events available.</li>
+    {% endfor %}
+</ul>

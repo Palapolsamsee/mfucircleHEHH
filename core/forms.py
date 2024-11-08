@@ -1,4 +1,3 @@
-from .models import Event
 from django import forms
 
 from django.contrib.auth.models import User
@@ -45,13 +44,6 @@ class SearchForm(forms.Form):
 #     class Meta:
 #         model = Tweet
 #         fields = ['content']
-
-
-class EventForm(forms.ModelForm):
-    class Meta:
-        model = Event
-        fields = ['title', 'description', 'event_image', 'event_date']
-
 
 
 class CustomLoginForm(AuthenticationForm):

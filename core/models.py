@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 import math
+import datetime
 from django.utils.crypto import get_random_string
 from ckeditor.fields import RichTextField
-
+from datetime import date
 class Tweet(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     content = RichTextField(blank = True,null = True)
@@ -45,14 +46,6 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.author} commented: {self.content}'
     
-    
-class Event(models.Model):
-    title = models.CharField(max_length=255)
-    description = models.TextField()
-    event_image = models.ImageField(upload_to='event_images/', null=True, blank=False)
-    event_date = models.DateField()
-    event_end = models.DateField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Helpcenter(models.Model):
     text = models.TextField()
@@ -65,3 +58,13 @@ class Helpcenter(models.Model):
 
     def is_checked_method(self):
         return self.is_checked
+
+class News(models.Model):
+    title = models.TextField(100)
+    dis = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to='News/', null=True, blank=True)
+    
+    def __str__(self):
+        return self.text
+    
