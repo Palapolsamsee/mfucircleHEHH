@@ -34,15 +34,15 @@ rebecca.warren@example.com
 OVuVWFZ9Z
 >
 
-> moon
+> ****
 
 >
 
-> moon@moon.com
+> ****
 
 >
 
-> OVuVWFZ9Z
+> *****
 
   
   
